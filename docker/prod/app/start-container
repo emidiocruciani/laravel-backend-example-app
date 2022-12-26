@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+su-exec "${WWWUSER}" php -d variables_order=EGPCS /var/www/html/artisan optimize
+
+exec /usr/bin/supervisord -c /etc/supervisor.d/supervisord.ini

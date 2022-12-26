@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+if [[ -z "${WWWUSER}" ]]; then
+  export WWWUSER=1000
+fi
+
+if [ $# -gt 0 ]; then
+    exec su-exec "${WWWUSER}" "$@"
+else
+    su-exec "${WWWUSER}" php /usr/local/bin/composer install
+    
+    su-exec "${WWWUSER}" php -d variables_order=EGPCS /app/artisan config:cache
+    su-exec "${WWWUSER}" php -d variables_order=EGPCS /app/artisan migrate
+
+    exec /usr/bin/supervisord -c /etc/supervisor.d/supervisord.ini
+fi

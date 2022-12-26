@@ -1,0 +1,35 @@
+services:
+
+    # DEVELOPMENT override config
+    example-app-laravel:
+        build: 
+            context: .
+            target: development
+        image: example-app/laravel-dev
+        environment:
+            - APP_ENV=local
+            - APP_DEBUG=true
+            - LOG_LEVEL=debug
+            - APP_KEY=
+            - DB_PASSWORD=
+        volumes:
+             - './source:/app'
+
+    # PRODUCTION override config
+    # example-app-laravel:
+    #     build: 
+    #         context: .
+    #         target: production
+    #     image: example-app/laravel-prod
+    #     environment:
+    #         - APP_ENV=production
+    #         - APP_DEBUG=false
+    #         - APP_KEY=
+    #         - DB_PASSWORD=
+    #     env_file:
+    #         - './source/.env'
+    
+    example-app-pgsql-db:
+        environment:
+            - PGPASSWORD=
+            - POSTGRES_PASSWORD=
