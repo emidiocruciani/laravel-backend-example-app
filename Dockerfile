@@ -46,6 +46,10 @@ RUN apk add --virtual .pgsql-deps \
     && docker-php-ext-install pdo pdo_pgsql \
     && apk del .pgsql-deps
 
+# Configure supervisor (base)
+RUN mkdir -p /etc/supervisor.d/
+RUN mkdir -p /var/log/supervisor
+
 
 
 FROM base AS development
@@ -59,12 +63,10 @@ ENV WWWGROUP=$WWWGROUP
 
 # Add local development user
 RUN addgroup -S -g $WWWGROUP laravel
-RUN adduser -H -D -S -s /bin/bash -G laravel -u $WWWUSER laravel
+RUN adduser -D -S -s /bin/bash -G laravel -u $WWWUSER laravel
 
-# Configure supervisor
-RUN mkdir -p /etc/supervisor.d/
+# Configure supervisor (development)
 COPY ./docker/dev/app/supervisord.ini /etc/supervisor.d/supervisord.ini
-RUN mkdir -p /var/log/supervisor
 
 # Configure php
 COPY ./docker/dev/app/php.ini /etc/php81/php.ini
@@ -90,10 +92,8 @@ RUN chown -R www-data:www-data /app
 # Build vendor directory
 RUN composer install --no-dev
 
-# Configure supervisor
-RUN mkdir -p /etc/supervisor.d/
+# Configure supervisor (production)
 COPY ./docker/prod/app/supervisord.ini /etc/supervisor.d/supervisord.ini
-RUN mkdir -p /var/log/supervisor
 
 # Configure php
 COPY ./docker/prod/app/php.ini /etc/php81/php.ini

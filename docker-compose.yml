@@ -4,6 +4,7 @@ services:
         container_name: example_app_laravel
         ports:
             - '127.0.0.1:8080:8000'
+            - '172.17.0.1:8080:8000'
         environment:
             - APP_NAME=Laravel example app
             - APP_URL=http://localhost:8080
@@ -12,12 +13,13 @@ services:
             - DB_PORT=5432
             - DB_DATABASE=app
             - DB_USERNAME=user
+            - LOG_DRIVER=daily
             - MAIL_HOST=example-app-mailhog-smtp
             - MAIL_PORT=1025
             - MAIL_ENCRYPTION=null
             - MAIL_FROM_ADDRESS=hello@example.com
             - MAIL_FROM_NAME=Laravel example app
-            - SESSION_DRIVER=file
+            - SESSION_DRIVER=database
             - SESSION_LIFETIME=120
         networks:
             - example-app

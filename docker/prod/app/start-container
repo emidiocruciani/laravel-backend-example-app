@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+if [[ -z "${WWWUSER}" ]]; then
+  export WWWUSER=1000
+fi
+
 su-exec "${WWWUSER}" php -d variables_order=EGPCS /var/www/html/artisan optimize
 
 exec /usr/bin/supervisord -c /etc/supervisor.d/supervisord.ini
